@@ -13,6 +13,7 @@ import {
 import './App.css';
 import { truecallerService, TruecallerProfile, CallAnalytics } from './services/truecallerService';
 import { LoginPage } from './components/LoginPage';
+import { apiService } from './services/api';
 
 // Types
 interface Call {
@@ -117,7 +118,8 @@ const analyzeImportance = (caller: string, category: string, transcript?: string
 
 function App() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'history' | 'settings' | 'analytics'>('dashboard');
-  const [calls, setCalls] = useState<Call[]>(MOCK_CALLS);
+  const [calls, setCalls] = useState<Call[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [incomingCall, setIncomingCall] = useState<Call | null>(null);
   const [isDark, setIsDark] = useState(false);
   const [isAIEnabled, setIsAIEnabled] = useState(true);
@@ -134,7 +136,25 @@ function App() {
   const [userTruecallerId, setUserTruecallerId] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
-  // Load Truecaller profiles for all calls
+  // Load calls from backend on mount
+  useEffect(() => {
+    const loadCalls = async () => {
+      if (isAuthenticated) {
+        try {
+          const data = await apiService.getCalls();
+          setCalls(data.map((call: any) => ({
+            ...call,
+            timestamp: new Date(call.timestamp)
+          })));
+        } catch (error) {
+          console.error('Failed to load calls:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    loadCalls();
+  }, [isAuthenticated]);
   useEffect(() => {
     const loadCallerProfiles = async () => {
       const profiles = new Map<string, TruecallerProfile>();
@@ -232,60 +252,77 @@ function App() {
     setIncomingCall(null);
   };
 
-  const handleAIResponse = (call: Call) => {
+  const handleAIResponse = async (call: Call) => {
     const template = MESSAGE_TEMPLATES.find(t => t.id === selectedTemplate);
     const importance = analyzeImportance(call.caller, call.category, call.reason);
     
+    let updatedCall = { ...call };
+    
     if (importance === 'high' && autoAnswerHighPriority) {
-      setCalls(prev => [...prev, { 
+      updatedCall = { 
         ...call, 
-        status: 'auto-answered', 
+        status: 'auto-answered' as const, 
         transcript: `AI: ${template?.content}\nCaller: ${call.reason}\nAI: Transferring to user...`,
         aiResponse: 'High priority call auto-answered and connected'
-      }]);
+      };
     } else if (importance === 'low' && sendMessageForLow) {
-      setCalls(prev => [...prev, { 
+      updatedCall = { 
         ...call, 
-        status: 'message-sent',
+        status: 'message-sent' as const,
         aiResponse: template?.content
-      }]);
-    } else {
-      setCalls(prev => [...prev, call]);
+      };
     }
+    
+    // Save to backend
+    try {
+      await apiService.createCall(updatedCall);
+      setCalls(prev => [...prev, updatedCall]);
+    } catch (error) {
+      console.error('Failed to save call:', error);
+    }
+    
     setIncomingCall(null);
   };
 
   // Handle login with Truecaller ID
-  const handleLogin = async (truecallerId: string) => {
+  const handleLogin = async (truecallerId: string, password: string, isRegistering: boolean) => {
     setLoginError('');
+    setIsLoading(true);
     
-    // Verify Truecaller ID format and simulate verification
-    const phoneRegex = /^\+[1-9]\d{1,14}$/;
-    if (!phoneRegex.test(truecallerId)) {
-      setLoginError('Invalid Truecaller ID format');
-      return;
-    }
-    
-    // Simulate Truecaller verification API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Check if user exists in Truecaller database (mock verification)
-    const isValidUser = truecallerId.length >= 10;
-    
-    if (isValidUser) {
-      setUserTruecallerId(truecallerId);
+    try {
+      let data;
+      if (isRegistering) {
+        data = await apiService.register(truecallerId, password);
+      } else {
+        data = await apiService.login(truecallerId, password);
+      }
+      
+      setUserTruecallerId(data.user.truecallerId);
       setIsAuthenticated(true);
-      setIsTruecallerConnected(true); // Auto-connect Truecaller on login
-    } else {
-      setLoginError('Truecaller ID not found. Please register with Truecaller first.');
+      setIsTruecallerConnected(true);
+      
+      // Load user settings
+      if (data.user.settings) {
+        setIsAIEnabled(data.user.settings.isAIEnabled);
+        setAutoAnswerHighPriority(data.user.settings.autoAnswerHighPriority);
+        setSendMessageForLow(data.user.settings.sendMessageForLow);
+        setIsAutoAIActive(data.user.settings.isAutoAIActive);
+        setIsDark(data.user.settings.theme === 'dark');
+      }
+    } catch (error: any) {
+      setLoginError(error.message || (isRegistering ? 'Registration failed' : 'Login failed'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Handle logout
   const handleLogout = () => {
+    apiService.clearToken();
     setIsAuthenticated(false);
     setUserTruecallerId('');
     setIsTruecallerConnected(false);
+    setCalls([]);
   };
 
   const stats = {

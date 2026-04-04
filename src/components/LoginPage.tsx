@@ -4,7 +4,7 @@ import { Shield, Phone, Lock, Eye, EyeOff, CheckCircle, AlertTriangle } from 'lu
 
 interface LoginPageProps {
   isDark: boolean;
-  onLogin: (truecallerId: string) => void;
+  onLogin: (truecallerId: string, password: string, isRegistering: boolean) => void;
   error?: string;
 }
 
@@ -14,6 +14,8 @@ export function LoginPage({ isDark, onLogin, error }: LoginPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [name, setName] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ export function LoginPage({ isDark, onLogin, error }: LoginPageProps) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsLoading(false);
-    onLogin(truecallerId);
+    onLogin(truecallerId, password, isRegistering);
   };
 
   return (
@@ -90,6 +92,32 @@ export function LoginPage({ isDark, onLogin, error }: LoginPageProps) {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name Input - Only for registration */}
+          {isRegistering && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                Name (Optional)
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your name"
+                  className={`w-full px-4 py-3 rounded-xl outline-none transition-all ${
+                    isDark 
+                      ? 'bg-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500' 
+                      : 'bg-gray-100 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500'
+                  }`}
+                />
+              </div>
+            </motion.div>
+          )}
+
           {/* Truecaller ID Input */}
           <div>
             <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -186,13 +214,25 @@ export function LoginPage({ isDark, onLogin, error }: LoginPageProps) {
                 Verifying Truecaller ID...
               </span>
             ) : (
-              'Login with Truecaller'
+              isRegistering ? 'Create Account' : 'Login with Truecaller'
             )}
           </button>
         </form>
 
         {/* Footer */}
-        <div className="mt-6 text-center">
+        <div className="mt-6 text-center space-y-3">
+          {/* Toggle Login/Register */}
+          <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
+            <button
+              type="button"
+              onClick={() => setIsRegistering(!isRegistering)}
+              className="text-blue-500 hover:text-blue-600 font-medium"
+            >
+              {isRegistering ? 'Login' : 'Register'}
+            </button>
+          </p>
+          
           <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
             By logging in, you agree to share your Truecaller profile with AI Call Assistant
           </p>
