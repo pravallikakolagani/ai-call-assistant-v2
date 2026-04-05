@@ -16,6 +16,13 @@ import { LoginPage } from './components/LoginPage';
 import { apiService } from './services/api';
 import { CalendarIntegration, ScheduleCallbackModal } from './components/CalendarIntegration';
 import { SMSSettings } from './components/SMSSettings';
+import { ContactManager } from './components/ContactManager';
+import { RecordingManager } from './components/RecordingManager';
+import { DNDSettings } from './components/DNDSettings';
+import { EmailSettings } from './components/EmailSettings';
+import { LanguageSelector } from './components/LanguageSelector';
+import { WebhookSettings } from './components/WebhookSettings';
+import { SpamFilterSettings } from './components/SpamFilterSettings';
 
 // Types
 interface Call {
@@ -1297,6 +1304,76 @@ function SettingsView({
         className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
       >
         <SMSSettings isDark={isDark} />
+      </motion.div>
+
+      {/* Contact Routing */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <ContactManager isDark={isDark} />
+      </motion.div>
+
+      {/* Recording Manager */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <RecordingManager isDark={isDark} />
+      </motion.div>
+
+      {/* DND Settings */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <DNDSettings isDark={isDark} />
+      </motion.div>
+
+      {/* Email Settings */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <EmailSettings isDark={isDark} />
+      </motion.div>
+
+      {/* Language Selector */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <LanguageSelector isDark={isDark} />
+      </motion.div>
+
+      {/* Webhook Settings */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <WebhookSettings isDark={isDark} />
+      </motion.div>
+
+      {/* Spam Filter Settings */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <SpamFilterSettings isDark={isDark} />
       </motion.div>
 
       {/* About */}
