@@ -155,6 +155,7 @@ function App() {
   }, [incomingCall]);
 
   // Auto-AI trigger when user can't reach phone (rings too long)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (incomingCall && isAIEnabled && isAutoAIActive && ringDuration >= autoAIThreshold) {
       // Check caller history to determine action
