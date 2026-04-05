@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const callRoutes = require('./routes/calls');
+const calendarRoutes = require('./routes/calendar');
 
 const app = express();
 
@@ -28,6 +29,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/aicallass
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/calls', callRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

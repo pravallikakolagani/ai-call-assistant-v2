@@ -14,6 +14,8 @@ import './App.css';
 import { truecallerService, TruecallerProfile, CallAnalytics } from './services/truecallerService';
 import { LoginPage } from './components/LoginPage';
 import { apiService } from './services/api';
+import { CalendarIntegration, ScheduleCallbackModal } from './components/CalendarIntegration';
+import { SMSSettings } from './components/SMSSettings';
 
 // Types
 interface Call {
@@ -1275,6 +1277,26 @@ function SettingsView({
             </div>
           ))}
         </div>
+      </motion.div>
+
+      {/* Calendar Integration */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <CalendarIntegration isDark={isDark} />
+      </motion.div>
+
+      {/* SMS Settings */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}
+      >
+        <SMSSettings isDark={isDark} />
       </motion.div>
 
       {/* About */}
