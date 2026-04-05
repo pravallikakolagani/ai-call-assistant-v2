@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Mic, Play, Pause, Download, Trash2, Search, 
-  FileText, Clock, Check, X, Settings, Volume2
-} from 'lucide-react';
+import { Mic, Play, Pause, Download, Trash2, FileText, Clock, Check, X, Settings } from 'lucide-react';
 import { recordingService, Recording, Transcription } from '../services/recordingService';
 
 interface RecordingManagerProps {

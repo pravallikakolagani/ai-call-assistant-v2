@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Moon, Sun, Clock, Calendar, Focus, Plus, Trash2, Check, X,
-  Phone, AlertTriangle
-} from 'lucide-react';
+import { Moon, Clock, Focus, Plus, Trash2 } from 'lucide-react';
 import { dndService, DNDSchedule, FocusMode } from '../services/dndService';
 import { ContactCategory } from '../services/contactRoutingService';
 

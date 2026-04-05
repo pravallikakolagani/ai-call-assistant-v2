@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Globe, Check, Sparkles, Mic
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, Mic } from 'lucide-react';
 import { languageService, SupportedLanguage, LANGUAGE_CONFIGS } from '../services/languageService';
 
 interface LanguageSelectorProps {

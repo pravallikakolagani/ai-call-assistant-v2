@@ -3,18 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, PhoneIncoming, PhoneMissed, PhoneOff, MessageSquare,
   Bot, AlertTriangle, CheckCircle, Clock, Moon, Sun, Zap,
-  Shield, BarChart3, Mic, User, Search, MapPin, Users,
+  Shield, Mic, User, Search, MapPin, Users,
   TrendingUp, Flag, Star
 } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+  XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell
 } from 'recharts';
 import './App.css';
 import { truecallerService, TruecallerProfile, CallAnalytics } from './services/truecallerService';
 import { LoginPage } from './components/LoginPage';
 import { apiService } from './services/api';
-import { CalendarIntegration, ScheduleCallbackModal } from './components/CalendarIntegration';
+import { CalendarIntegration } from './components/CalendarIntegration';
 import { SMSSettings } from './components/SMSSettings';
 import { ContactManager } from './components/ContactManager';
 import { RecordingManager } from './components/RecordingManager';
@@ -47,70 +47,11 @@ interface MessageTemplate {
   category: string;
 }
 
-// Mock Data
-const MOCK_CALLS: Call[] = [
-  {
-    id: '1',
-    caller: 'John Smith',
-    phoneNumber: '+1 (555) 123-4567',
-    timestamp: new Date(Date.now() - 1000 * 60 * 5),
-    duration: 0,
-    status: 'incoming',
-    importance: 'high',
-    category: 'work',
-    reason: 'Urgent business meeting'
-  },
-  {
-    id: '2',
-    caller: 'Sarah Johnson',
-    phoneNumber: '+1 (555) 987-6543',
-    timestamp: new Date(Date.now() - 1000 * 60 * 30),
-    duration: 180,
-    status: 'answered',
-    importance: 'high',
-    category: 'work',
-    transcript: 'Discussed project timeline and deliverables...'
-  },
-  {
-    id: '3',
-    caller: 'Unknown Number',
-    phoneNumber: '+1 (555) 000-1111',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    duration: 0,
-    status: 'message-sent',
-    importance: 'low',
-    category: 'spam',
-    aiResponse: 'Hi, I am currently unavailable. Please leave a message or call back later.'
-  },
-  {
-    id: '4',
-    caller: 'Mom',
-    phoneNumber: '+1 (555) 222-3333',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4),
-    duration: 300,
-    status: 'auto-answered',
-    importance: 'high',
-    category: 'personal',
-    transcript: 'AI: Hello, the user is busy. Is this urgent? Mom: Yes, family emergency. AI: Connecting you now...',
-    aiResponse: 'Emergency call detected. Connected immediately.'
-  },
-  {
-    id: '5',
-    caller: 'Sales Team',
-    phoneNumber: '+1 (555) 444-5555',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8),
-    duration: 0,
-    status: 'missed',
-    importance: 'medium',
-    category: 'work'
-  }
-];
-
-const MESSAGE_TEMPLATES: MessageTemplate[] = [
-  { id: '1', name: 'Busy - Call Back', category: 'general', content: 'Hi, I am currently busy. Please call back later or leave a message.' },
-  { id: '2', name: 'In Meeting', category: 'work', content: 'I am in a meeting right now. I will get back to you as soon as possible.' },
-  { id: '3', name: 'Driving', category: 'general', content: 'I am driving at the moment. I will call you back when I reach my destination.' },
-  { id: '4', name: 'Emergency Only', category: 'urgent', content: 'This is an automated response. If this is an emergency, please text "URGENT" to connect immediately.' }
+const MESSAGE_TEMPLATES = [
+  { id: '1', name: 'Busy Working', content: 'Hi, I am currently busy working. Please leave a message or call back later.', category: 'Professional' },
+  { id: '2', name: 'In Meeting', content: 'I am in a meeting right now. I will get back to you as soon as possible.', category: 'Professional' },
+  { id: '3', name: 'Driving', content: 'I am driving and cannot take calls. I will call you back when I reach my destination.', category: 'Personal' },
+  { id: '4', name: 'Family Time', content: 'Spending quality time with family. Will respond to urgent matters only.', category: 'Personal' }
 ];
 
 // AI Importance Detection Logic
@@ -128,7 +69,8 @@ const analyzeImportance = (caller: string, category: string, transcript?: string
 function App() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'history' | 'settings' | 'analytics'>('dashboard');
   const [calls, setCalls] = useState<Call[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoading, setIsLoading] = useState(false);
   const [incomingCall, setIncomingCall] = useState<Call | null>(null);
   const [isDark, setIsDark] = useState(false);
   const [isAIEnabled, setIsAIEnabled] = useState(true);
@@ -213,6 +155,7 @@ function App() {
   }, [incomingCall]);
 
   // Auto-AI trigger when user can't reach phone (rings too long)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (incomingCall && isAIEnabled && isAutoAIActive && ringDuration >= autoAIThreshold) {
       // Check caller history to determine action

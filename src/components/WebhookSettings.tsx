@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Webhook, Plus, Trash2, Check, X, Send, Settings,
-  CheckCircle, AlertCircle
-} from 'lucide-react';
+import { Webhook, Plus, Trash2, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { webhookService, WebhookEndpoint } from '../services/webhookService';
 
 interface WebhookSettingsProps {
@@ -21,7 +18,7 @@ export function WebhookSettings({ isDark }: WebhookSettingsProps) {
   const availableEvents = webhookService.getAvailableEvents();
 
   const handleAdd = () => {
-    const endpoint = webhookService.addEndpoint({
+    webhookService.addEndpoint({
       name: newName,
       url: newUrl,
       events: selectedEvents as any,

@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Users, Plus, Trash2, Edit2, Check, X, 
-  Phone, Bot, Ban, PhoneForwarded, Voicemail,
-  Clock
-} from 'lucide-react';
+import { Users, Moon, Clock, Focus, Plus, Trash2 } from 'lucide-react';
 import { 
   contactRoutingService, 
   Contact, 
@@ -20,6 +15,7 @@ export function ContactManager({ isDark }: ContactManagerProps) {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [rules, setRules] = useState<RoutingRule[]>([]);
   const [activeTab, setActiveTab] = useState<'contacts' | 'rules'>('contacts');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showAddContact, setShowAddContact] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 

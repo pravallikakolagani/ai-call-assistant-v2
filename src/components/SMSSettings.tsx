@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Send, Trash2, Plus, Check, AlertCircle } from 'lucide-react';
-import { smsService, SMSTemplate, DEFAULT_TEMPLATES } from '../services/smsService';
+import { smsService, SMSTemplate } from '../services/smsService';
 
 interface SMSSettingsProps {
   isDark: boolean;

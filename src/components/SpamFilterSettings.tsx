@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Shield, AlertTriangle, Ban, Check, X, Plus, Trash2,
-  Globe, Bot, Users
-} from 'lucide-react';
+import { Shield, Ban, Check, X, Plus, Trash2, Globe, Bot, Users } from 'lucide-react';
 import { spamFilterService, SpamPattern, SpamSettings } from '../services/spamFilterService';
 
 interface SpamFilterSettingsProps {

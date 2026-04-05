@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Check, X, ExternalLink, Clock, ChevronRight } from 'lucide-react';
+import { Calendar, Check, X, Clock } from 'lucide-react';
 import { calendarService, CalendarEvent } from '../services/calendarService';
 
 interface ScheduleCallbackModalProps {

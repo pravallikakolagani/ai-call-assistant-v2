@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Mail, Send, Check, AlertCircle, TestTube, Settings,
-  Bell, Calendar, Clock
-} from 'lucide-react';
+import { Mail, Send, Check, AlertCircle, Bell, Calendar, Clock } from 'lucide-react';
 import { emailService } from '../services/emailService';
 
 interface EmailSettingsProps {
