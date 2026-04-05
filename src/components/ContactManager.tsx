@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Moon, Clock, Focus, Plus, Trash2 } from 'lucide-react';
+import { Users, Plus } from 'lucide-react';
 import { 
   contactRoutingService, 
   Contact, 
