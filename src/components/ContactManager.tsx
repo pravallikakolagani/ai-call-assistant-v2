@@ -19,6 +19,7 @@ export function ContactManager({ isDark }: ContactManagerProps) {
   const [showAddContact, setShowAddContact] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setContacts(contactRoutingService.getAllContacts());
     setRules(contactRoutingService.getRules());
