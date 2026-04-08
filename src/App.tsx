@@ -169,6 +169,7 @@ function App() {
       
       handleAIResponse(incomingCall);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ringDuration, incomingCall, isAIEnabled, isAutoAIActive, autoAIThreshold, calls]);
   useEffect(() => {
     const timer = setTimeout(() => {
